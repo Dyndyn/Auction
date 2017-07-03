@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+    <definition name="mainLayout" template="/WEB-INF/layouts/mainLayout.jsp">
+        <put-attribute name="title" value=""/>
+        <put-attribute name="header" value="/WEB-INF/templates/header.jsp"/>
+        <put-attribute name="category" value="/WEB-INF/templates/category.jsp"/>
+        <put-attribute name="body" value=""/>
+        <put-attribute name="footer" value="/WEB-INF/templates/footer.jsp"/>
+        <put-attribute name="dialog" value=""/>
+        <put-attribute name="dialogOk" value=""/>
+
+        <put-list-attribute name="stylesheets">
+            <add-attribute value="/css/bootstrap.css"/>
+            <add-attribute value="/css/general.css"/>
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts">
+            <add-attribute value="/js/jquery.js"/>
+            <add-attribute value="/js/bootstrap.js"/>
+        </put-list-attribute>
+
+    </definition>
+
+    <definition name="home" extends="mainLayout">
+        <put-attribute name="title" value="Home"/>
+        <put-attribute name="body" value="/WEB-INF/views/home.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/shop-homepage.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/home.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="lot" extends="mainLayout">
+        <put-attribute name="title" value="Lot"/>
+        <put-attribute name="body" value="/WEB-INF/views/lot.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/shop-item.css"/>
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/rating.js"/>
+            <add-attribute value="/js/comment.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="lotsByCategory" extends="mainLayout">
+        <put-attribute name="title" value="Lots"/>
+        <put-attribute name="body" value="/WEB-INF/views/lotsByCategory.jsp"/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/shop-homepage.css"/>
+        </put-list-attribute>
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/home.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="addLot" extends="mainLayout">
+        <put-attribute name="title" value="Adding lot"/>
+        <put-attribute name="body" value="/WEB-INF/views/addLot.jsp"/>
+        <put-attribute name="category" value=""/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/shop-item.css"/>
+            <add-attribute value="/css/uploadImage.css"/>
+        </put-list-attribute>
+
+        <put-list-attribute name="javascripts" inherit="true">
+            <add-attribute value="/js/uploadImage.js"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="login" extends="mainLayout">
+        <put-attribute name="title" value="Log In"/>
+        <put-attribute name="header" value="/WEB-INF/views/login.jsp"/>
+        <put-attribute name="category" value=""/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/panel.css"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="register" extends="login">
+        <put-attribute name="title" value="Register"/>
+        <put-attribute name="header" value="/WEB-INF/views/register.jsp"/>
+    </definition>
+
+    <definition name="403" extends="mainLayout">
+        <put-attribute name="title" value="403"/>
+        <put-attribute name="header" value="/WEB-INF/views/403.jsp"/>
+        <put-attribute name="category" value=""/>
+        <put-attribute name="footer" value=""/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/panel.css"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="404" extends="mainLayout">
+        <put-attribute name="title" value="404"/>
+        <put-attribute name="header" value="/WEB-INF/views/404.jsp"/>
+        <put-attribute name="category" value=""/>
+        <put-attribute name="footer" value=""/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/panel.css"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="generalError" extends="mainLayout">
+        <put-attribute name="title" value="General error"/>
+        <put-attribute name="header" value="/WEB-INF/views/generalError.jsp"/>
+        <put-attribute name="category" value=""/>
+        <put-attribute name="footer" value=""/>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/css/panel.css"/>
+        </put-list-attribute>
+    </definition>
+
+</tiles-definitions>

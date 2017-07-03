@@ -1,0 +1,34 @@
+img#blah{
+    max-width: 40%;
+    max-height: 150px;
+    vertical-align: text-top;
+}
+
+#img-container{
+    display: none;
+}
+
+input.img {
+    visibility: hidden;
+}
+
+div.img{
+    background: #e8f4de;
+    border: 1px dashed #c5d7b5;
+    border-radius: 5px;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+}
+
+span.glyphicon-upload{
+    top: 24px;
+    left: 24px;
+    color: #0098d0;
+    font-size: 31px;
+}
+span.glyphicon-remove{
+    color: #ff0000;
+    font-size: 24px;
+    cursor: pointer;
+}
