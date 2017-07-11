@@ -23,7 +23,7 @@ import java.sql.Timestamp;
 @Entity
 @NamedQueries({
         @NamedQuery(name="comment.getByLotId",
-                query="SELECT c FROM Comment c where c.lot.id = :lotid")
+                query="SELECT c FROM Comment c where c.lot.id = :lotid ORDER BY c.date DESC")
 })
 @Table(name = "comment")
 public class Comment implements Serializable {

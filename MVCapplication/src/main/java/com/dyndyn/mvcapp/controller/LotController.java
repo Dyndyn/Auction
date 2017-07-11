@@ -5,6 +5,7 @@ import com.dyndyn.model.Comment;
 import com.dyndyn.model.Image;
 import com.dyndyn.model.Lot;
 import com.dyndyn.model.Rating;
+import com.dyndyn.model.User;
 import com.dyndyn.mvcapp.service.CategoryService;
 import com.dyndyn.mvcapp.service.CommentService;
 import com.dyndyn.mvcapp.service.LotService;
@@ -15,6 +16,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +36,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dyndyn on 20.06.2017.
@@ -45,19 +53,24 @@ public class LotController {
     private String restLotsByCategoryIdUrl;
     @Value("${application.rest.lot}")
     private String restLotUrl;
+    @Value("${application.broadcast.lot}")
+    private String broadcastLot;
 
     private LotService lotService;
     private CategoryService categoryService;
     private UserService userService;
     private CommentService commentService;
+    private SimpMessagingTemplate messaging;
 
     @Autowired
     public LotController(LotService lotService, CategoryService categoryService,
-                         UserService userService, CommentService commentService) {
+                         UserService userService, CommentService commentService,
+                         SimpMessagingTemplate simpMessagingTemplate) {
         this.lotService = lotService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.commentService = commentService;
+        this.messaging = simpMessagingTemplate;
     }
 
     @GetMapping("/lot")
@@ -126,6 +139,18 @@ public class LotController {
         lotService.addRating(rating);
         response.setStatus(HttpServletResponse.SC_OK);
         return "";
+    }
+
+    @MessageMapping("/lot")
+    public void handleTyping(String body, @Header("lotId") Integer lotId, SimpMessageHeaderAccessor headerAccessor){
+        if("typing".equals(body)){
+            Map<String, Object> attrs = headerAccessor.getSessionAttributes();
+            User user = (User)attrs.get("user");
+            String msg = user.getName() + " is typing";
+            Map<String, Object> headers = new HashMap<>();
+            headers.put("userId", user.getId());
+            messaging.convertAndSend(broadcastLot + lotId, msg, headers);
+        }
     }
 
     @InitBinder("lot")

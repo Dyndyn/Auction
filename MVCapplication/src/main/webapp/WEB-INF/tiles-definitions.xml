@@ -21,6 +21,8 @@
         <put-list-attribute name="javascripts">
             <add-attribute value="/js/jquery.js"/>
             <add-attribute value="/js/bootstrap.js"/>
+            <add-attribute value="/js/stomp.js"/>
+            <add-attribute value="/js/sockjs.js"/>
         </put-list-attribute>
 
     </definition>
@@ -46,6 +48,7 @@
         <put-list-attribute name="javascripts" inherit="true">
             <add-attribute value="/js/rating.js"/>
             <add-attribute value="/js/comment.js"/>
+            <add-attribute value="/js/listener.js"/>
         </put-list-attribute>
     </definition>
 

@@ -10,12 +10,7 @@ function subFormComment(e) {
         dataType: 'text',
         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         success: function (response, textStatus, jqXHR) {
-            var text = '<hr><div class="row">' +
-                '<div class="col-md-12">' + response +
-                '<span class="pull-right">0 days ago</span><p>' +
-                comment.val() +
-                '</p></div></div>';
-            $("div.comment").after(text);
+            fillComment(response, comment.val());
         },
         error: function (response, textStatus, jqXHR) {
             $("#message").text(response.responseText);
@@ -27,6 +22,20 @@ function subFormComment(e) {
             });
         }
     });
+}
+
+function fillComment(user, comment) {
+    var text = '<div class="row">' +
+        '<div class="col-md-12">' + user +
+        '<span class="pull-right">0 days ago</span><p>' +
+        comment +
+        '</p></div></div>';
+    if($("div.comment").length) {
+        $("div.comment").after("<hr>" + text);
+    } else {
+        $("div.well").prepend(text + "<hr>");
+    }
+
 }
 
 $( document ).ready(function() {

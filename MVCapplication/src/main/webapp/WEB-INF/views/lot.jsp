@@ -15,7 +15,7 @@
         <div class="ratings">
 
             <form:form id="rating" role="form" action="/addRating" method="post" commandName="rating">
-                <form:hidden path="id.lotId" value="${lot.id}"/>
+                <form:hidden path="id.lotId" id="lotId" value="${lot.id}"/>
                 <form:hidden path="rating" id="ratingVal"/>
             </form:form>
             <p class="pull-right">${lot.reviews} reviews</p>
@@ -41,7 +41,12 @@
                         </div>
                     </spring:bind>
                     <form:hidden path="lot.id" value="${lot.id}"></form:hidden>
+                    <form:hidden path="user.id" value="${user.id}" id="userId"></form:hidden>
 
+                    <div class="pull-left">
+                        <span id="typing"></span>
+                        <span id="dots"></span>
+                    </div>
                     <div class="text-right">
                         <form:button class="btn btn-success">Leave a Review</form:button>
                     </div>
@@ -63,34 +68,6 @@
             <hr>
             </c:if>
         </c:forEach>
-
-        <div class="row">
-            <div class="col-md-12">
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star-empty"></span>
-                Anonymous
-                <span class="pull-right">12 days ago</span>
-                <p>I've alredy ordered another one!</p>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-md-12">
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star"></span>
-                <span class="glyphicon glyphicon-star-empty"></span>
-                Anonymous
-                <span class="pull-right">15 days ago</span>
-                <p>I've seen some better than this, but not at this price. I definitely recommend this item.</p>
-            </div>
-        </div>
 
     </div>
 
