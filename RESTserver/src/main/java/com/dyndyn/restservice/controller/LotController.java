@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,6 +73,12 @@ public class LotController {
     public void update(@RequestBody final Lot lot) {
         lotService.update(lot);
         LOGGER.trace("lot with id = {} was updated", lot.getId());
+    }
+
+    @PutMapping("/api/lot/enabled")
+    public void enabled(@RequestBody final Lot lot) {
+        lotService.enabled(lot);
+        LOGGER.info("lot with id = {} was updated, enabled = " + lot.isEnabled(), lot.getId());
     }
 
     @DeleteMapping("/api/lot/{lotId}")

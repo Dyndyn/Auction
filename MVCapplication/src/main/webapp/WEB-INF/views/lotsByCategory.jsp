@@ -9,20 +9,22 @@
                 <ol class="carousel-indicators">
                     <c:set var="index" scope="page" value="0"/>
                     <c:forEach var="lot" items="${lots}" varStatus="loop">
-                        <c:if test="${not empty lot.image.data}">
+                        <c:if test="${not empty lot.imageId}">
                             <li data-target="#carousel-example-generic"
                                 data-slide-to="${index}" ${index == 0 ? "class=\"active\"" : ""}></li>
                             <c:set var="index" scope="page" value="${index+1}"/>
                         </c:if>
+
                     </c:forEach>
                 </ol>
                 <div class="carousel-inner">
                     <c:set var="index" scope="page" value="0"/>
                     <c:forEach var="lot" items="${lots}" varStatus="loop">
-                        <c:if test="${not empty lot.image.data}">
+                        <c:if test="${not empty lot.imageId}">
 
                             <div class="item ${index == 0 ? "active" : ""}">
-                                <img class="slide-image" src="${lot.image.data}" alt="">
+                                <img class="slide-image"
+                                     src="<c:url value="/image?imageId=${lot.imageId}"/>" alt="">
                             </div>
                             <c:set var="index" scope="page" value="${index+1}"/>
                         </c:if>
@@ -44,7 +46,12 @@
         <c:forEach var="lot" items="${lots}" varStatus="loop">
             <div class="col-sm-4 col-lg-4 col-md-4">
                 <div class="thumbnail">
-                    <img src="${lot.image.data != null ? lot.image.data : "/img/question.jpg"}" alt="">
+                    <c:if test="${not empty lot.imageId}">
+                        <img src="<c:url value="/image?imageId=${lot.imageId}"/>" alt="">
+                    </c:if>
+                    <c:if test="${empty lot.imageId}">
+                        <img src="/img/question.jpg" alt="">
+                    </c:if>
                     <div class="caption">
                         <h4 class="pull-right">$${lot.price}</h4>
                         <h4><a href="<c:url value='/lot?id=${lot.id}'/>">${lot.name}</a>

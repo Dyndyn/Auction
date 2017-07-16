@@ -46,9 +46,10 @@ public class LotRepository {
     }
 
     public List<Lot> getByUserId(int userId) {
-        Query query = em.createNamedQuery("lot.getByUserId", Lot.class);
+        Query query = em.createNamedQuery("lot.getByUserId");
         query.setParameter("userid", userId);
-        return query.getResultList();
+        List<Object[]> result = query.getResultList();
+        return result.stream().map(this::parseObjects).collect(Collectors.toList());
     }
 
     public List<Lot> getByCategoryId(int categoryId) {
@@ -60,6 +61,12 @@ public class LotRepository {
 
     public void update(Lot lot) {
         em.merge(lot);
+    }
+
+    public void enabled(Lot lot) {
+        Lot temp = em.find(Lot.class, lot.getId());
+        temp.setEnabled(lot.isEnabled());
+        em.merge(temp);
     }
 
     public void remove(int lotId) {

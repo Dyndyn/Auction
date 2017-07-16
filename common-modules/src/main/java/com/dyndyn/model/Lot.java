@@ -18,7 +18,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
@@ -34,7 +33,7 @@ import java.util.List;
         @NamedQuery(name = "lot.getAll",
                 query = "SELECT l, count(r.id.userId), avg(r.rating) FROM Lot l LEFT JOIN Rating r ON l.id = r.id.lotId GROUP BY l"),
         @NamedQuery(name = "lot.getByUserId",
-                query = "SELECT l FROM Lot l where l.user.id = :userid"),
+                query = "SELECT l, count(r.id.userId), avg(r.rating) FROM Lot l LEFT JOIN Rating r ON l.id = r.id.lotId WHERE l.user.id = :userid GROUP BY l"),
         @NamedQuery(name = "lot.getByCategoryId",
                 query = "SELECT l, count(r.id.userId), avg(r.rating) FROM Lot l LEFT JOIN Rating r ON l.id = r.id.lotId LEFT JOIN l.categories c where c.id = :categoryid GROUP BY l"),
         @NamedQuery(name = "lot.getById",
@@ -57,16 +56,15 @@ public class Lot implements Serializable {
     @Column
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    private Image image;
+    @Column(name = "image_id")
+    private Integer imageId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "is_enabled", insertable = false)
-    private boolean isEnabled;
+    private boolean enabled;
 
     @Min(value = 0, message = "error.lotPrice.min")
     @Basic(optional = false)
@@ -125,12 +123,12 @@ public class Lot implements Serializable {
         this.description = description;
     }
 
-    public Image getImage() {
-        return image;
+    public Integer getImageId() {
+        return imageId;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
     }
 
     public User getUser() {
@@ -142,11 +140,11 @@ public class Lot implements Serializable {
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+        this.enabled = enabled;
     }
 
     public double getPrice() {
@@ -203,9 +201,9 @@ public class Lot implements Serializable {
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');
-        sb.append(", image=").append(image);
+        sb.append(", imageId=").append(imageId);
         sb.append(", user=").append(user);
-        sb.append(", isEnabled=").append(isEnabled);
+        sb.append(", isEnabled=").append(enabled);
         sb.append(", price=").append(price);
         sb.append(", diff=").append(diff);
         sb.append(", rating=").append(rating);

@@ -5,7 +5,12 @@
 <div class="col-md-9">
 
     <div class="thumbnail">
-        <img class="img-responsive" src="${lot.image.data != null ? lot.image.data : "/img/question.jpg"}" alt="">
+        <c:if test="${not empty lot.imageId}">
+            <img class="img-responsive" src="<c:url value="/image?imageId=${lot.imageId}"/>" alt="">
+        </c:if>
+        <c:if test="${empty lot.imageId}">
+            <img class="img-responsive" src="/img/question.jpg" alt="">
+        </c:if>
         <div class="caption-full">
             <h4 class="pull-right">$${lot.price}</h4>
             <h4><a href="#">${lot.name}</a>

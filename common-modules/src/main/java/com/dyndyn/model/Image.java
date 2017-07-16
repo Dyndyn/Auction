@@ -13,8 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.util.Base64;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "image")
@@ -33,9 +32,6 @@ public class Image implements Serializable {
 
     @Transient
     private MultipartFile multipartFile;
-
-    @Transient
-    private String data;
 
     @Column(name = "data")
     private byte[] imageData;
@@ -94,14 +90,6 @@ public class Image implements Serializable {
         this.imageData = imageData;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
     @PrePersist
     public void onCreate() throws IOException {
         if(imageData == null && multipartFile != null){
@@ -116,13 +104,15 @@ public class Image implements Serializable {
         }
     }
 
-    public void encodeBase64() throws IOException {
-        onCreate();
-        Base64.Encoder encoder = Base64.getEncoder();
-        byte[] encodeBase64 = encoder.encode(imageData);
-        StringBuilder sb = new StringBuilder("data:");
-        sb.append(contentType).append(";base64,");
-        sb.append(new String(encodeBase64, "UTF-8"));
-        data = sb.toString();
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Image{");
+        sb.append("id=").append(id);
+        sb.append(", fileName='").append(fileName).append('\'');
+        sb.append(", contentType='").append(contentType).append('\'');
+        sb.append(", multipartFile=").append(multipartFile);
+        sb.append(", imageData=").append(Arrays.toString(imageData));
+        sb.append('}');
+        return sb.toString();
     }
 }

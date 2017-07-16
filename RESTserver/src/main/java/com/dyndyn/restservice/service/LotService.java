@@ -56,4 +56,8 @@ public class LotService {
     public void add(Rating rating){
         lotRepository.add(rating);
     }
+
+    public void enabled(Lot lot){
+        lotRepository.enabled(lot);
+    }
 }

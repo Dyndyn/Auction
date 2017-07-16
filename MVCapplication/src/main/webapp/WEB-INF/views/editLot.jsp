@@ -5,12 +5,12 @@
 <div class="col-md-offset-2 col-md-8">
 
 
-    <form:form role="form" method="post" commandName="lotForm" enctype="multipart/form-data">
+    <form:form role="form" method="post" commandName="lot" enctype="multipart/form-data">
 
         <spring:bind path="name">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:label path="name" class="control-label">Enter lot name</form:label>
-                <form:input path="name" class="form-control" placeholder="Name" />
+                <form:input path="name" class="form-control" placeholder="Name"/>
                 <form:errors path="name" class="control-label"></form:errors>
             </div>
         </spring:bind>
@@ -40,10 +40,12 @@
         </spring:bind>
 
         <spring:bind path="categories">
-            <div class="form-group categories ${status.error ? 'has-error' : ''}">
-                <form:label path="categories" class="control-label">Choose categories:</form:label>
-                <form:checkboxes path="categories" items="${categories}"  itemLabel="name" itemValue="id" class="form-control"/>
-                <form:errors path="categories" class="control-label"></form:errors>
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:label path="categories" class="control-label">Choose categories</form:label>
+                <form:select path="categories" class="form-control" multiple="false">
+                    <form:options items="${categories}"  itemLabel="name" itemValue="id"></form:options>
+                </form:select>
+                <form:errors path="name" class="control-label"></form:errors>
             </div>
         </spring:bind>
 

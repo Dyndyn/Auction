@@ -6,8 +6,10 @@ import com.dyndyn.model.Image;
 import com.dyndyn.model.Lot;
 import com.dyndyn.model.Rating;
 import com.dyndyn.model.User;
+import com.dyndyn.mvcapp.dto.LotAddingForm;
 import com.dyndyn.mvcapp.service.CategoryService;
 import com.dyndyn.mvcapp.service.CommentService;
+import com.dyndyn.mvcapp.service.ImageService;
 import com.dyndyn.mvcapp.service.LotService;
 import com.dyndyn.mvcapp.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -94,24 +96,37 @@ public class LotController {
         return "lotsByCategory";
     }
 
+    @GetMapping("/myLots")
+    public String getLotsByUser(final Model model) {
+        List<Lot> lots = lotService.getLotsByUserId();
+        model.addAttribute("lots", lots);
+        model.addAttribute("enable", new Lot());
+        return "userLots";
+    }
+
     @GetMapping("/addLot")
     public String getAddLotPage(final Model model) {
-        Lot lot = new Lot();
-        lot.setImage(new Image());
-        model.addAttribute("lot", lot);
+        model.addAttribute("lotForm", new LotAddingForm());
         List<Category> categories = categoryService.getCategories();
         model.addAttribute("categories", categories);
         return "addLot";
     }
 
+    @PostMapping("/lot/enable")
+    public void addLot(@ModelAttribute("enable") Lot lot, final HttpServletResponse response) {
+        lotService.enable(lot);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
     @PostMapping("/addLot")
-    public String addLot(@Valid @ModelAttribute("lot") Lot lot, final BindingResult result, final Model model) {
+    public String addLot(@Valid @ModelAttribute("lotForm") LotAddingForm lot, final BindingResult result, final Model model) {
         if (result.hasErrors()) {
             model.addAttribute("lot", lot);
             List<Category> categories = categoryService.getCategories();
             model.addAttribute("categories", categories);
             return "addLot";
         }
+
         lotService.addLot(lot);
         return "redirect:/home";
     }
@@ -120,7 +135,7 @@ public class LotController {
     @ResponseBody
     public String addRating(@Valid @ModelAttribute("rating") Rating rating, final BindingResult result,
                             final HttpServletResponse response) {
-        if(userService.getCurrentUserFromSession() == null){
+        if (userService.getCurrentUserFromSession() == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return "You must be authorized";
         }
@@ -142,10 +157,10 @@ public class LotController {
     }
 
     @MessageMapping("/lot")
-    public void handleTyping(String body, @Header("lotId") Integer lotId, SimpMessageHeaderAccessor headerAccessor){
-        if("typing".equals(body)){
+    public void handleTyping(String body, @Header("lotId") Integer lotId, SimpMessageHeaderAccessor headerAccessor) {
+        if ("typing".equals(body)) {
             Map<String, Object> attrs = headerAccessor.getSessionAttributes();
-            User user = (User)attrs.get("user");
+            User user = (User) attrs.get("user");
             String msg = user.getName() + " is typing";
             Map<String, Object> headers = new HashMap<>();
             headers.put("userId", user.getId());
@@ -153,19 +168,15 @@ public class LotController {
         }
     }
 
-    @InitBinder("lot")
+    @InitBinder("lotForm")
     public void customizeBinding(WebDataBinder binder) {
 
         binder.registerCustomEditor(List.class, "categories", new CustomCollectionEditor(List.class) {
             @Override
             protected Object convertElement(Object element) {
-                ObjectMapper mapper = new ObjectMapper();
-                if (element instanceof String) {
-                    try {
-                        return mapper.readValue((String) element, Category.class);
-                    } catch (IOException e) {
-                        LOGGER.error(e.getMessage(), e);
-                    }
+                if (element != null) {
+                    Integer categoryId = Integer.parseInt(element.toString());
+                    return new Category(categoryId);
                 }
                 return null;
             }

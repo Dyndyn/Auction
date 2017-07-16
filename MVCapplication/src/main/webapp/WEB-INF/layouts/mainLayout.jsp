@@ -33,7 +33,7 @@
 <!-- /.container -->
 <tiles:insertAttribute name="footer"/>
 <tiles:insertAttribute name="dialog"/>
-<tiles:insertAttribute name="dialogOk"/>
+<tiles:insertAttribute name="error"/>
 
 <c:forEach var="js" items="${javascripts}">
     <script src="<c:url value="${js}"/>"></script>
